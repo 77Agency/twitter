@@ -2200,6 +2200,13 @@ module Twitter
       end.flatten
     end
 
+    def users!(*args)
+      options = args.extract_options!
+      args.flatten.each_slice(MAX_USERS_PER_REQUEST).map do |users|
+        collection_from_response(Twitter::User, :post, "/1.1/users/lookup.json", options.merge_users(users))
+      end.flatten
+    end
+
     # Returns users that match the given query
     #
     # @see https://dev.twitter.com/docs/api/1.1/get/users/search
